@@ -5,7 +5,7 @@ bGetGTTopic   = false;
 bGetTFFrames  = false;
 bGetGTFrames  = false;
 bConstructAPE = true;
-bagFilePath   = '~/.ros/KartoSLAM__2021-06-07-19-36-26.bag';
+bagFilePath   = '~/.ros/KartoSLAM__2021-08-02-13-17-31_reference_bag.bag';
 
 filename = "Base_Variables.mat";
 save(filename)
@@ -17,7 +17,6 @@ clear
 load("Base_Variables.mat")
 
 if bGetTFTopic
-
 
     fprintf("Getting the information for TF pre-processing... \n")
 
@@ -181,6 +180,7 @@ if bConstructAPE
     YPlotter_TF = str2double(APE_Matrix(2:end, 6));
     XPlotter_GT = str2double(APE_Matrix(2:end, 4));
     YPlotter_GT = str2double(APE_Matrix(2:end, 7));
+    TPlotter_TF = str2double(APE_Matrix(2:end, 1)) + str2double(APE_Matrix(2:end, 2))*10^(-9) - (str2double(APE_Matrix(2, 1)) + str2double(APE_Matrix(2, 2))*10^(-9));
 
     f = figure('visible','off');
     plot(XPlotter_TF, YPlotter_TF, XPlotter_GT, YPlotter_GT)
@@ -195,8 +195,26 @@ if bConstructAPE
     Legend.EdgeColor = 'none';
     saveas(f,'TF_vs_GT_PosePlot','png')
     
+    fprintf("Plotting the TF and GT poses together with time as 3D plot... \n")
     
-    fprintf("Creating the statistics data charts...")
+    f = figure('visible','off');
+    plot3(XPlotter_TF, YPlotter_TF, TPlotter_TF, XPlotter_GT, YPlotter_GT, TPlotter_TF)
+    title("SLAM pose vs Ground Truth pose vs Time")
+    hold on
+    grid on
+    plot3(XPlotter_TF(2)  , YPlotter_TF(2)  , TPlotter_TF(2), '-pentagram', 'MarkerSize', 20, 'MarkerFaceColor', 'blue')
+    plot3(XPlotter_TF(end), YPlotter_TF(end), TPlotter_TF(end), '-hexagram' , 'MarkerSize', 20, 'MarkerFaceColor', 'red')
+    zlabel("t axis (s)")
+    xlabel("x axis (m)")
+    ylabel("y axis (m)")
+    Legend = legend("SLAM", "Ground truth", "Init", "End");
+    Legend.Location = 'northwest';
+    Legend.Color = 'none';
+    Legend.EdgeColor = 'none';
+    saveas(f,'TF_vs_GT_PosePlot_vs_Time','png')
+    
+    
+    fprintf("Creating the statistics data charts... \n")
 
     f = figure('visible','off');
     subplot(2,2,1)
@@ -231,7 +249,7 @@ if bConstructAPE
     saveas(f,'APE_Statistics','png')
     
     
-    fprintf("Creating the time series plot...")
+    fprintf("Creating the time series plot... \n")
    
     time      = str2double(APE_Matrix(2:end, 1)) + str2double(APE_Matrix(2:end, 2))*10^(-9) - str2double(APE_Matrix(2, 1));
     maxtime   = str2double(APE_Matrix(end, 1)) + str2double(APE_Matrix(end, 2))*10^(-9) - str2double(APE_Matrix(2, 1));
