@@ -1,11 +1,77 @@
+%----------------------------------------------%
+% Universidad de Costa Rica
+% Engineering Faculty
+% Electrical Engineering School
+% Graduation project: 
+% SLAM Algorithms comparison 
+% using ROS nodes
+%
+% Created by: Kevin Trejos Vargas
+% email: kevin.trejosvargas@ucr.ac.cr
+%
+% Description: This script takes a bag file
+%     containing robot ground truth pose messages
+%     besides SLAM tf tree messages to get the
+%     base footprint referenced to map, and
+%     computes the error as sqrt(err_x^2+err_y^2).
+
+%
+% Instructions for use:
+%     1. Modify the bagFilePath to point to your rosbag.
+%     2. Run the script and wait for its results.
+%
+% Notes: 
+%     1. Ground truth is taken by using the following repo:
+%            https://github.com/trejkev/Robot_Pose_Publisher.git
+%----------------------------------------------%
+
+%% Remove old analysis files
+if exist('APE_Time_Series.png', 'file') == 2
+    delete('APE_Time_Series.png')
+end
+
+if exist('APE_Statistics.png', 'file') == 2
+    delete('APE_Statistics.png')
+end
+
+if exist('TF_vs_GT_PosePlot_vs_Time.png', 'file') == 2
+    delete('TF_vs_GT_PosePlot_vs_Time.png')
+end
+
+if exist('TF_vs_GT_PosePlot.png', 'file') == 2
+    delete('TF_vs_GT_PosePlot.png')
+end
+
+if exist('GT_Position.mat', 'file') == 2
+    delete('GT_Position.mat')
+end
+
+if exist('TF_Position.mat', 'file') == 2
+    delete('TF_Position.mat')
+end
+
+if exist('Bag_Reader_GT.mat', 'file') == 2
+    delete('Bag_Reader_GT.mat')
+end
+
+if exist('Bag_Reader_TF.mat', 'file') == 2
+    delete('Bag_Reader_TF.mat')
+end
+
+if exist('Base_Variables.mat', 'file') == 2
+    delete('Base_Variables.mat')
+end
+
+%% Compute the basic variables needed throughout the script
+
 clear
 
-bGetTFTopic   = false;
-bGetGTTopic   = false;
-bGetTFFrames  = false;
-bGetGTFrames  = false;
+bGetTFTopic   = true;
+bGetGTTopic   = true;
+bGetTFFrames  = true;
+bGetGTFrames  = true;
 bConstructAPE = true;
-bagFilePath   = '~/.ros/KartoSLAM__2021-08-02-13-17-31_reference_bag.bag';
+bagFilePath   = '~/Documents/Pruebas_SLAM/Full Factorial/Tratamiento_9/KartoSLAM_FullFactorial_Tratamiento9_2021-08-21-08-32-17.bag';
 
 filename = "Base_Variables.mat";
 save(filename)
