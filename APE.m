@@ -71,7 +71,7 @@ bGetGTTopic   = true;
 bGetTFFrames  = true;
 bGetGTFrames  = true;
 bConstructAPE = true;
-bagFilePath   = '~/Documents/Pruebas_SLAM/Full Factorial/Tratamiento_9/KartoSLAM_FullFactorial_Tratamiento9_2021-08-21-08-32-17.bag';
+bagFilePath   = '~/Documents/Pruebas_SLAM/Pruebas_Finales/ArenaCasa/RepetirVuelta/Reversa/KartoSLAM_AreCasaSimp_2Vueltas_Reversa_2021-09-12-18-18-19.bag';
 
 filename = "Base_Variables.mat";
 save(filename)
